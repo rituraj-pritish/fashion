@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^7.1.2",
     "final-form": "^4.20.0",
     "firebase": "^7.6.2",
-    "immer": "^6.0.5",
+    "immer": "^9.0.6",
     "moment": "^2.26.0",
     "polished": "^3.6.4",
     "react": "^16.12.0",
