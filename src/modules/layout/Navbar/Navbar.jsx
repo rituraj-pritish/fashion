@@ -91,9 +91,9 @@ const Navbar = () => {
 						setSearchQuery={setText}
 					/>
 
-					<li>
+					{/* <li>
 						<CurrencySelector />
-					</li>
+					</li>*/}
 
 					<li
 						ref={userRef}

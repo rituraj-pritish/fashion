@@ -69,7 +69,7 @@ const FilterPanel = () => {
 					<Icon display='inline-block' width='15px'>
 						<BarsIcon />
 					</Icon>{' '}
-          Filter
+					<p style={{marginLeft: '8px'}}>Filter</p>
 				</FilterBtn>
 			</FilterBtnContainer>
 			<FilterPanelSidebar show={show} ref={node}>

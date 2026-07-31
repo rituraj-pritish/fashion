@@ -36,6 +36,7 @@
         ],
         "react/prop-types": "off",
         "no-unused-vars": "warn",
-        "object-curly-spacing": ["warn", "always"]
+        "object-curly-spacing": ["warn", "always"],
+        "no-mixed-spaces-and-tabs": "off"
     }
 }

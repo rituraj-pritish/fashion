@@ -11,7 +11,7 @@ import ProductCarousel from 'components/ProductCarousel'
 import ShuffleArray from 'helpers/ shuffleArray'
 import Spinner from 'components/Spinner'
 import useUserActions from 'hooks/useUserActions'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import useProducts from 'hooks/useProducts'
 
 const Review = () => {

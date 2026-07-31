@@ -22,51 +22,51 @@ export default () => {
 
 	const getCartItems = async () => {
 		setIsFetching(true)
-		const res = await getCartItemsApi(user?.id)
-		const items = res.docs.map(doc => doc.data())
+		const res = await getCartItemsApi(user?.email)
+		const items = await res.json()
 		cartState.set(items)
 		setIsFetching(false)
 	}
 
-	const addToCart = async item => {
-		const addedDate = new Date().toISOString()
-		const userId = user?.id
-		if (!userId) {
+	const addToCart = async data => {
+		if (!user.email) {
 			return alert.error({ message: 'Login to continue' })
 		}
-		await addToCartApi(userId, {
-			...item,
-			forLater: false,
-			date: addedDate,
-		})
-		cartState.set(prevItems => prevItems.concat(item))
+
+		const response = await addToCartApi(user.email, data.variant_id)
+		if(response.ok) {
+  		const cartItem = await response.json()
+		  cartState.set(prevItems => prevItems.concat(cartItem))
+		}
 	}
 
-	const removeFromCart = async productId => {
-		const userId = user?.id
-		await removeFromCartApi(userId, productId)
-		cartState.set(prevItems => prevItems.filter(({ variantId }) => variantId !== productId))
+	const removeFromCart = async variant_id => {
+		const response = await removeFromCartApi(user.email, variant_id)
+		if(response.ok) {
+  		cartState.set(prevItems => prevItems.filter((item) => item.variant_id.toString() !== variant_id.toString()))
+		}
 	}
 
 	const updateCart = async ({ id, quantity }) => {
 		const userId = user?.id
 		await updateCartApi(userId, id, { quantity })
-		cartState.set(prevItems => prevItems.map(item => item.variantId === id ? {	
+		cartState.set(prevItems => prevItems.map(item => item.variantId === id ? {
 			...item,
 			quantity
 		} : item))
 	}
 
 	const emptyCart = async () => {
-		const userId = user?.id
-		await emptyCartApi(userId)
-		cartState.set([])
+		const response = await emptyCartApi(user.email)
+		if(response.ok) {
+	    cartState.set([])
+		}
 	}
 
 	const saveForLater = async id => {
 		const userId = user?.id
 		await updateCartApi(userId, id, { forLater: true })
-		cartState.set(prevItems => prevItems.map(item => item.variantId === id ? {	
+		cartState.set(prevItems => prevItems.map(item => item.variantId === id ? {
 			...item,
 			forLater: true
 		} : item))
@@ -75,7 +75,7 @@ export default () => {
 	const backToCart = async id => {
 		const userId = user?.id
 		await updateCartApi(userId, id, { forLater: false })
-		cartState.set(prevItems => prevItems.map(item => item.variantId === id ? {	
+		cartState.set(prevItems => prevItems.map(item => item.variantId === id ? {
 			...item,
 			forLater: false
 		} : item))

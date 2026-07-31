@@ -13,7 +13,7 @@ import useCart from 'hooks/useCart'
 const Cart = () => {
 	const { cartItems } = useCart()
 	// const forLater = cartItems.filter(({ forLater }) => forLater === true)
-	
+
 	return (
 		<PageContainer>
 			{!cartItems.length ? (
@@ -27,9 +27,9 @@ const Cart = () => {
 				<Container>
 					<ItemsContainer>
 						{cartItems.map(item => (
-							<CartItem page='cart' key={item.variantId} {...item} />
+							<CartItem page='cart' key={item.variant_id.toString()} {...item} />
 						))}
-						
+
             {/* Saved For Later
 						{forLater.map(item => (
 							<CartItem page='cart' key={item.id} {...item} />

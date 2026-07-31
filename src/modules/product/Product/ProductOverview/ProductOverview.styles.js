@@ -99,7 +99,7 @@ export const CartBtn = styled.div`
 export const Wishlist = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 3rem;
+  margin-top: 2rem;
   width: fit-content;
 
   i {

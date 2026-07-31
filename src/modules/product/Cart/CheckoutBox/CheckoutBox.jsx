@@ -11,9 +11,9 @@ const CheckoutBox = ({ cart }) => {
 	const history = useHistory()
 	const { currency } = useCurrency()
 	const { isAuthenticated } = useAuthentication()
-	
-	const FREE_DELIVERY_AMOUNT = (currency.rate * 100).toFixed(2)
-	const DELIVERY_FEE = (currency.rate * 10).toFixed(2)
+
+	const FREE_DELIVERY_AMOUNT = (currency.rate * 29).toFixed(2)
+	const DELIVERY_FEE = (currency.rate * 19).toFixed(2)
 
 	let subTotal = cart
 		.reduce(
@@ -33,7 +33,7 @@ const CheckoutBox = ({ cart }) => {
 	return (
 		<CheckoutBoxContainer>
 			<Container>
-        Subtotal: <p>{subTotal}</p> <br />
+        Subtotal: <p>{currency.symbol} {subTotal}</p> <br />
         Shipping:{' '}
 				<p>
 					{parseFloat(subTotal) > parseFloat(FREE_DELIVERY_AMOUNT)

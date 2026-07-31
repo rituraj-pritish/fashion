@@ -19,7 +19,7 @@ const PaymentsPage = () => {
 	const { cartItems, emptyCart } = useCart()
 	const { currency } = useCurrency()
 	const { addNewOrder } = useOrders()
-  
+
 	const [isOrderPlaced, setIsOrderPlaced] = useState(false)
 
 	const amount = cartItems.reduce(
@@ -27,7 +27,7 @@ const PaymentsPage = () => {
 		0
 	)
 
-	const finalAmount = amount > 100 ? amount : amount + 10
+	const finalAmount = amount > 29 ? amount : amount + 19
 	const payableAmount = `${currency.symbol} ${(
 		currency.rate * finalAmount
 	).toFixed(2)}`

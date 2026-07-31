@@ -89,6 +89,6 @@ export const FilterBtn = styled.div`
   width: max-content;
 
   @media ${sizes.xl} {
-    display: block;
+    display: flex;
   }
 `

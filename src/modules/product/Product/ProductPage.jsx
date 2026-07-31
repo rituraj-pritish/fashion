@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 
 import ProductOverview from './ProductOverview'
@@ -6,22 +6,22 @@ import ProductCarousel from 'components/ProductCarousel'
 import { PageContainer } from 'index.styles'
 import ProductReviews from './ProductReviews'
 import useProducts from 'hooks/useProducts'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 
 const ProductPage = () => {
-	const { productId } = useParams()
+	const {productId} = useParams()
 	const { products, getProduct } = useProducts()
-  
+
 	const product = getProduct(productId)
 	return (
 		<PageContainer>
 			<ProductOverview product={product} />
-			<ProductReviews productId={product.id} />
+			{/* <ProductReviews productId={product.id} />
 			<ProductCarousel
 				title='Similar Products'
 				data={products}
 				excludeProduct={product.id}
-			/>
+			/>*/}
 		</PageContainer>
 	)
 }

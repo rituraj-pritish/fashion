@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Slider from 'react-slick'
 import { Link } from 'react-router-dom'
 import LazyLoad from 'react-lazy-load'
@@ -17,11 +17,11 @@ import {
 import Button from 'atoms/Button'
 import Icon from 'atoms/Icon'
 import Text from 'atoms/Text'
+import Image from 'components/Image'
 import useAuthentication from 'hooks/useAuthentication'
 import useCurrency from 'hooks/useCurrency'
 import useWishlist from 'hooks/useWishlist'
 import useCart from 'hooks/useCart'
-import { useState } from 'react'
 
 const settings = {
 	infinite: false,
@@ -62,24 +62,19 @@ const CarouselProductItem = ({ product }) => {
 	const { addToCart, cartItems } = useCart()
 	const { isAuthenticated } = useAuthentication()
 	const [isLoading, setIsLoading] = useState(false)
-	const { name, variants, id, sale } = product
-	const { price, images, id: variantId } = variants[
-		Object.values(variants).find(({ stock }) => stock > 0).id
-	]
 
-	const isInCart = cartItems.find(item => item.variantId === variantId)
+	const { name, variants, id, sale } = product
+	const { price, images, id: variantId } = variants.find(({ stock }) => stock > 0)
+
+
+	const isInCart = cartItems.find(item => item.variant_id.toString() === variantId.toString())
 	const isInWishlist = wishlistItems.find(({ productId }) => productId === product.id)
 
 	const handleCartBtn = async () => {
 		if (isInCart) return
 		setIsLoading(true)
 		await addToCart({
-			productId: id,
-			variantId,
-			imageUrl: images[0],
-			name,
-			price,
-			quantity: 1
+  		variant_id: variantId
 		})
 		setIsLoading(false)
 	}
@@ -111,19 +106,19 @@ const CarouselProductItem = ({ product }) => {
 					offsetBottom={250}
 					offsetRight={2000}
 				>
-					<img src={images[0]} alt={name} />
+					<Image s3Key={`${id}/${images[0]}`} alt={name} />
 				</LazyLoad>
 			</Link>
 			{sale && <SaleBanner />}
 			<ItemBottom>
-				<Icon
+				{/* <Icon
 					className='wishlist-icon'
 					color={isInWishlist ? 'red' : 'lightGrey'}
 					onClick={handleWishlist}
 				>
 					<HeartIcon />
-				</Icon>
-				<Text fontWeight='bold'>{name}</Text>
+				</Icon>*/}
+				<Text fontWeight='bold' mt={2}>{name}</Text>
 				<Text mt='0.5rem' mb='1.5rem'>
 					{`${currency.symbol} ${(currency.rate * price).toFixed(2)}`}
 				</Text>
@@ -150,7 +145,7 @@ const ProductCarousel = ({
 	// filter out out of stock products
 		.filter(product => {
 			if (excludeProduct === product.id) return null
-			const variant = Object.values(product.variants).find(
+			const variant = product.variants.find(
 				({ stock }) => stock > 0
 			)
 			if (!variant) return null

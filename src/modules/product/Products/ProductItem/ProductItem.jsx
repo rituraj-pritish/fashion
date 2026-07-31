@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import LazyLoad from 'react-lazy-load'
 
+import Image from 'components/Image'
 import HeartIcon from 'assets/icons/HeartIcon'
 import SaleBanner from '../../../../modules/product/Product/SaleBanner'
 import {
@@ -27,12 +28,12 @@ const ProductItem = ({
 	const { addToCart, cartItems } = useCart()
 	const { currency } = useCurrency()
 	const { isAuthenticated } = useAuthentication()
-  
+
 	const { name, variants, id, sale } = product
-	const variant = variants[Object.keys(variants)[0]]
+	const variant = variants[0]
 	const image = variant.images[0]
 
-	const isInCart = cartItems?.find(item => item.variantId === variant.id)
+	const isInCart = cartItems?.find(item => item.variant_id.toString() === variant.id.toString())
 	const isInWishlist = wishlistItems?.find(item => item.productId === id)
 
 	const handleCartBtn = async e => {
@@ -40,12 +41,7 @@ const ProductItem = ({
 		if (isInCart) return
 		setIsLoading(true)
 		await addToCart({
-			productId: id,
-			variantId: variant.id,
-			price: variant.price,
-			name,
-			imageUrl: image,
-			quantity: 1
+			variant_id: variant.id,
 		})
 		setIsLoading(false)
 	}
@@ -69,21 +65,21 @@ const ProductItem = ({
 		<ProductItemContainer>
 			<Link to={`/product/${id}/variant/${variant.id}`}>
 				<LazyLoad className='lazyload'>
-					<img src={image} alt={name} />
+					<Image s3Key={`${id}/${image}`} alt={name} />
 				</LazyLoad>
 			</Link>
 			{sale && <SaleBanner />}
 			<ItemBottom>
-				<Wishlist>
+				{/* <Wishlist>
 					<Icon
 						onClick={handleWishlist}
 						color={isInWishlist ? 'red' : 'lightGrey'}
 					>
 						<HeartIcon />
 					</Icon>
-				</Wishlist>
+				</Wishlist>*/}
 
-				<h3>{name}</h3>
+				<h3 style={{marginTop: '8px'}}>{name}</h3>
 				<p>
 					{`${currency.symbol} ${(variant.price * currency.rate).toFixed(2)}`}
 				</p>

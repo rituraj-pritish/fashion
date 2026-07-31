@@ -20,20 +20,25 @@ import useCurrency from 'hooks/useCurrency'
 const App = () => {
 	const { getCartItems } = useCart()
 	const { getWishlistItems } = useWishlist()
-	const { getProducts, products } = useProducts()
-	const { getCurrencies } = useCurrency()
+	const { getProducts, products, setProducts } = useProducts()
+  const { getCurrencies } = useCurrency()
 	const { authStateChangeHandler, isAuthenticated } = useAuthentication()
 
+	const getDetails = async () => {
+    const products = await getProducts()
+		setProducts(products)
+	}
+
 	useEffect(() => {
-		getProducts()
-		getCurrencies()
+    getDetails()
+		// getCurrencies()
 	}, [])
 
 	useEffect(() => {
 		authStateChangeHandler()
 		if(isAuthenticated) {
 			getCartItems()
-			getWishlistItems()
+			// getWishlistItems()
 		}
 	}, [isAuthenticated])
 

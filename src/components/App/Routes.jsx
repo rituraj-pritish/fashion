@@ -16,10 +16,12 @@ import PrivateRoute from 'components/PrivateRoute'
 import Review from 'modules/product/Review'
 import SignIn from 'modules/authentication/SignIn'
 import ForgotPassword from 'modules/authentication/ForgotPassword'
+import Upload from 'modules/product/Upload'
 
 const Routes = () => {
 	return (
 		<Switch>
+		<Route exact path='/products/upload' component={Upload} />
 			<Route exact path='/product/:productId/variant/:variantId' component={Product} />
 			<Route exact path='/products/:productsCategory' component={Products} />
 			<Route exact path='/s/:searchQuery' component={SearchResults} />

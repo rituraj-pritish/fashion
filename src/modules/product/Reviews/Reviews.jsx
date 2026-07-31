@@ -18,7 +18,7 @@ import {
 import Spinner from 'components/Spinner/Spinner'
 import ProductCarousel from 'components/ProductCarousel'
 import useUserActions from 'hooks/useUserActions'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import useProducts from 'hooks/useProducts'
 
 const Reviews = () => {
@@ -26,7 +26,7 @@ const Reviews = () => {
 	const { products, getProduct } = useProducts()
 
 	const product = getProduct(productId)
-	
+
 	const { getProductReviews } = useUserActions()
 	const [reviews, setReviews] = useState([])
 	const [isFetching, setIsFetching] = useState(true)

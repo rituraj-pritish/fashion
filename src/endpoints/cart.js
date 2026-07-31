@@ -1,30 +1,32 @@
 import { db } from 'core/firebase'
+import fetch from 'core/fetch'
 
-export const getCartItems = async userId => {
-	return db.collection('carts').doc(userId).collection('items').get()
+export const getCartItems = email => {
+  return fetch(`/carts/${email}/details`)
 }
 
-export const addToCart = async (userId, item) => {
-	return await db.collection('carts').doc(userId).collection('items').doc(item.variantId).set(item)
+export const addToCart = (email, variant_id) => {
+  return fetch(`/carts/${email}/${variant_id}`, {
+    method: 'post',
+  })
 }
 
-export const removeFromCart = async (userId, productId) => {
-	return db.collection('carts').doc(userId).collection('items').doc(productId).delete()
+export const removeFromCart = (email, variant_id) => {
+  return fetch(`/carts/${email}/${variant_id}`, {
+    method: 'delete',
+  })
 }
 
-export const updateCart = async (userId, productId, payload) => {
-	return db.collection('carts').doc(userId).collection('items').doc(productId).update(payload)
+export const updateCart = async (email, data) => {
+  return fetch(`/carts/${email}/${data.variant_id}`, {
+    method: 'post',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
 }
 
-export const emptyCart = async userId => {
-	return db
-		.collection('carts')
-		.doc(userId)
-		.collection('items')
-		.get()
-		.then(res => {
-			res.forEach(item => {
-				item.ref.delete()
-			})
-		})
+export const emptyCart = email => {
+  return fetch(`/carts/${email}`, {method: 'delete'})
 }

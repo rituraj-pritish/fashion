@@ -10,6 +10,7 @@ import TrashIcon from '../../../../assets/icons/TrashIcon'
 import { CartItemContainer, Details, Remove } from './CartItem.styles'
 import { Link } from 'react-router-dom'
 import LoadingWrap from 'components/LoadingWrap'
+import Image from 'components/Image'
 import theme from 'theme'
 import useCart from 'hooks/useCart'
 import useCurrency from 'hooks/useCurrency'
@@ -17,10 +18,10 @@ import useWishlist from 'hooks/useWishlist'
 
 const CartItem = ({
 	page,
-	imageUrl,
+	images,
 	price,
-	productId,
-	variantId,
+	product_id,
+	variant_id,
 	name,
 	quantity,
 	isSavedForLater,
@@ -33,9 +34,9 @@ const CartItem = ({
 	const handleRemove = async () => {
 		setIsLoading(true)
 		if (page === 'cart') {
-			await removeFromCart(variantId)
+			await removeFromCart(variant_id)
 		} else {
-			await removeFromWishlist(productId)
+			await removeFromWishlist(product_id)
 		}
 		setIsLoading(false)
 	}
@@ -43,11 +44,11 @@ const CartItem = ({
 	const secondaryCallToAction =
 		page === 'cart' ? (
 			isSavedForLater ? (
-				<Button variant='secondary' onClick={() => backToCart(variantId)}>
+				<Button variant='secondary' onClick={() => backToCart(variant_id)}>
 					Move to Cart
 				</Button>
 			) : (
-				<Button variant='secondary' onClick={() => saveForLater(variantId)}>
+				<Button variant='secondary' onClick={() => saveForLater(variant_id)}>
 					Save for Later
 				</Button>
 			)
@@ -61,30 +62,30 @@ const CartItem = ({
 		<LoadingWrap isLoading={isLoading}>
 			<CartItemContainer>
 				<LazyLoad className='lazyload'>
-					<Link to={`/product/${productId}/variant/${variantId}`}>
-						<img src={imageUrl} alt={name} />
+					<Link to={`/product/${product_id}/variant/${variant_id}`}>
+						<Image s3Key={`${product_id}/${images[0]}`} alt={name} />
 					</Link>
 				</LazyLoad>
 
 				<Details>
 					<p>{name}</p>
 
-					{page === 'cart' && (
+					{/* {page === 'cart' && (
 						<QuantityCounter
 							count={quantity}
 							onIncrement={async () => {
 								setIsLoading(true)
-								await updateCart({ id: variantId, quantity: quantity + 1 })
+								await updateCart({ id: variant_id, quantity: quantity + 1 })
 								setIsLoading(false)
 							}}
 							onDecrement={async () => {
 								if (quantity === 1) return
 								setIsLoading(true)
-								await updateCart({ id: variantId, quantity: quantity - 1 })
+								await updateCart({ id: variant_id, quantity: quantity - 1 })
 								setIsLoading(false)
 							}}
 						/>
-					)}
+					)}*/}
 				</Details>
 
 				<Text fontWeight='bold'>

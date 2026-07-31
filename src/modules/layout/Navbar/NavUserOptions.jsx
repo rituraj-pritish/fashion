@@ -34,7 +34,7 @@ const NavUserOptions = ({ show, setShow, userRef, history }) => {
 	const authOptions = (
 		<AuthOptions>
 			<ul>
-				<li>
+				{/* <li>
 					<Link to='/user/wishlist'>
 						<Icon>
 							<HeartIcon />
@@ -57,7 +57,7 @@ const NavUserOptions = ({ show, setShow, userRef, history }) => {
 						</Icon>
 						Account
 					</Link>
-				</li>
+				</li>*/}
 				<li>
 					<Link to='#' onClick={() => signOut(history)}>
 						<Icon>

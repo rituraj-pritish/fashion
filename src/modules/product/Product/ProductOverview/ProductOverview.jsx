@@ -31,7 +31,7 @@ import QuantityCounter from 'components/QuantityCounter'
 import theme from 'theme'
 import useAuthentication from 'hooks/useAuthentication'
 import useCurrency from 'hooks/useCurrency'
-import { useParams, useHistory } from 'react-router'
+import { useParams, useHistory } from 'react-router-dom'
 import useCart from 'hooks/useCart'
 import useWishlist from 'hooks/useWishlist'
 
@@ -45,28 +45,22 @@ const ProductOverview = ({ product }) => {
 	const { name, avg_rating, brand, variants, id } = product
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [variant, setVariant] = useState(variantId)
-	const [currentImg, setCurrentImg] = useState()
-	const [price, setPrice] = useState()
+	const [variant, setVariant] = useState(product.variants.find(({id}) => id.toString() === variantId.toString()))
+	const [currentImg, setCurrentImg] = useState(variant.images[0])
+	const [price, setPrice] = useState(variant.price)
 	const [quantity, setQuantity] = useState(1)
 
 	useEffect(() => {
-		setVariant(variantId)
+		setVariant(product.variants.find(({id}) => id.toString() === variantId.toString()))
 		ReactTooltip.rebuild()
 		return () => {
 			setVariant('')
 		}
 	}, [id, variantId])
 
-	useEffect(() => {
-		setCurrentImg(variants[variant]?.images[0])
-		setPrice(variants[variant]?.price)
-		setQuantity(1)
-	}, [id, variant, variantId, variants])
-
 	if (!variant) return 'loading'
 
-	const images = variants[variant]?.images.map(imageUrl => {
+	const images = variant?.images.map(imageUrl => {
 		const isCurrentImage = imageUrl === currentImg
 		return (
 			<SmallImage
@@ -75,34 +69,29 @@ const ProductOverview = ({ product }) => {
 				onClick={() => setCurrentImg(imageUrl)}
 			>
 				<LazyLoad className='lazyload'>
-					<Image src={imageUrl} alt='img' size='small' />
+					<Image s3Key={`/${id}/${imageUrl}`} alt='img' size='small' />
 				</LazyLoad>
 			</SmallImage>
 		)
 	})
 
-	const isInStock = variants[variant]?.stock > 0
-	const isInCart = cartItems.find(item => item.variantId === variantId)
+	const isInStock = variant?.stock > 0
+	const isInCart = cartItems.find(item => item.variant_id.toString() === variantId.toString())
 	const isInWishlist = wishlistItems.find(item => item.productId === id)
 
-	const changeVariant = varId => {
-		if (varId === variant) return
-		setVariant(varId)
-		setCurrentImg(variants[varId].images[0])
-		setPrice(variants[varId].price)
-		history.push(`/product/${id}/variant/${varId}`)
+	const changeVariant = newVariant => {
+		if (variant.id.toString() === newVariant.id.toString()) return
+		setVariant(newVariant)
+		setCurrentImg(newVariant.images[0])
+		setPrice(newVariant.price)
+		history.push(`/product/${id}/variant/${newVariant.id}`)
 	}
 
 	const handleCartBtn = async () => {
 		if (isInCart) return
 		setIsLoading(true)
 		await addToCart({
-			productId: id,
-			variantId,
-			name,
-			price,
-			imageUrl: variants[variant].images[0],
-			quantity: quantity,
+			variant_id: variantId,
 		})
 		setIsLoading(false)
 	}
@@ -130,12 +119,7 @@ const ProductOverview = ({ product }) => {
 		}
 		if(!isInCart) {
 			await addToCart({
-				productId: id,
-				variantId,
-				name,
-				price,
-				imageUrl: variants[variant].images[0],
-				quantity: 1,
+				variant_id: variantId,
 			})
 		}
 		history.push('/user/cart')
@@ -148,7 +132,7 @@ const ProductOverview = ({ product }) => {
 					<SmallImages>{images}</SmallImages>
 					<LazyLoad>
 						<LazyLoad className='lazyload'>
-							<Image src={currentImg} alt={name} />
+							<Image s3Key={`/${id}/${currentImg}`} alt={name} />
 						</LazyLoad>
 					</LazyLoad>
 				</ImagesContainer>
@@ -159,8 +143,10 @@ const ProductOverview = ({ product }) => {
 				<Text fontSize='1.5rem' color='grey' mt='-15px'>
 					{brand.toUpperCase()}
 				</Text>
-				<Text fontSize='2.3rem'>{`${currency.symbol} ${(currency.rate * price).toFixed(2)}`}</Text>
-				<Rating
+				<Text fontSize='2.3rem'>
+          {`${currency.symbol} ${(currency.rate * price).toFixed(2)}`}
+				</Text>
+				{/* <Rating
 					initialRating={avg_rating}
 					emptySymbol={
 						<Icon noPointer mr='0.3rem' color={theme.colors.golden}>
@@ -173,17 +159,17 @@ const ProductOverview = ({ product }) => {
 						</Icon>
 					}
 					readonly
-				/>
+				/>*/}
 				<Text fontSize='1.9rem' color={isInStock ? 'green' : 'red'}>
 					{isInStock ? 'In Stock' : 'Out of stock'}
 				</Text>
 
 				<Variants>
-					{Object.values(variants).map(item => (
+					{variants.map(item => (
 						<Variant
 							key={item.id}
 							data-tip={item.variant[0].toUpperCase() + item.variant.slice(1)}
-							onClick={() => changeVariant(item.id)}
+							onClick={() => changeVariant(item)}
 							color={item.color}
 						/>
 					))}
@@ -211,7 +197,7 @@ const ProductOverview = ({ product }) => {
 				</Policy>
 
 				<CartBtn>
-					<QuantityCounter disabled={!isInStock || isInCart} count={quantity} setCount={setQuantity} />
+					{/* <QuantityCounter disabled={!isInStock || isInCart} count={quantity} setCount={setQuantity} />*/}
 					<Button
 						variant='secondary'
 						isLoading={isLoading}
@@ -227,19 +213,20 @@ const ProductOverview = ({ product }) => {
 					fontWeight='bold'
 					fontSize='2rem'
 					letterSpacing='4px'
+					mb={5}
 					onClick={handleBuy}
 					disabled={!isInStock}
 				>
 					BUY NOW
 				</Button>
 
-				<Wishlist onClick={handleWishlist}>
+				{/* <Wishlist onClick={handleWishlist}>
 					<Icon color={isInWishlist ? 'red' : 'lightGrey'} mr='1rem'>
 						<HeartIcon />
 					</Icon>
 					<Text>{isInWishlist ? 'Added To Wishlist' : 'Add To Wishlist'}</Text>
-				</Wishlist>
-				<ProductDetails product={product} variant={variant} />
+				</Wishlist>*/}
+				{/* <ProductDetails product={product} variant={variant} />*/}
 			</ActionsContainer>
 		</ProductOverviewContainer>
 	)

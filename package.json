@@ -1,16 +1,17 @@
 {
   "name": "fashion",
-  "version": "0.1.0",
+  "version": "2.1.0",
   "private": true,
   "dependencies": {
-    "@hookstate/core": "^3.0.13",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "final-form": "^4.20.0",
     "firebase": "^7.6.2",
+
+    "@hookstate/core": "^3.0.13",
+    "final-form": "^4.20.0",
     "moment": "^2.26.0",
-    "polished": "^3.6.4",
+    "polished": "^3.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-final-form": "^6.5.0",
@@ -54,5 +55,6 @@
     "ajv": "^8.17.1",
     "eslint-plugin-react": "^7.27.1",
     "react-scripts": "^5.0.1"
-  }
+  },
+  "proxy": "http://localhost:8000"
 }

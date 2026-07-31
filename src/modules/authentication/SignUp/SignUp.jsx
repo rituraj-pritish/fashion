@@ -51,19 +51,20 @@ const SignUp = ({ history }) => {
 									validate={emailValidator}
 									component={TextFieldAdapter}
 								/>
-								<Field
+								{/* <Field
 									name='phone'
 									label='Phone'
 									component={TextFieldAdapter}
-								/>
+								/>*/}
 								<Field
 									name='password'
 									label='Password'
+									type='password'
 									isRequired
 									validate={passwordValidator}
 									component={TextFieldAdapter}
 								/>
-								<Field
+								{/* <Field
 									name='confirmPassword'
 									label='Confirm Password'
 									validate={val => {
@@ -73,7 +74,7 @@ const SignUp = ({ history }) => {
 									}}
 									isRequired
 									component={TextFieldAdapter}
-								/>
+								/>*/}
 								<Button type='submit' isLoading={submitting}>
                   Sign Up
 								</Button>
