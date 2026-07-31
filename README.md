@@ -1,8 +1,4 @@
-## Fashion.co
-
-clothing e-commerce web-app
-
-Checkout the app [here](https://fashion-fashion.herokuapp.com/)
+## Fashion
 
 ##### Screenshots
 
