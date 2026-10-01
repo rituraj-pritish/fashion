@@ -10,7 +10,7 @@
 
     "@hookstate/core": "^3.0.13",
     "final-form": "^4.20.0",
-    "moment": "^2.26.0",
+    "moment": "^2.31.0",
     "polished": "^3.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
